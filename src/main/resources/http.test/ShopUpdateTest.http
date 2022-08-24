@@ -1,0 +1,19 @@
+PUT http://localhost:8080/shop/1
+Content-Type: application/json
+
+{
+  "status": "DELETE"
+}
+
+
+### Send POST request with json body
+POST http://localhost:8080/shop
+Content-Type: application/json
+
+{
+  "shopName": "test",
+  "bizNo": 1234567890,
+  "tel" : "01048771935"
+}
+
+
