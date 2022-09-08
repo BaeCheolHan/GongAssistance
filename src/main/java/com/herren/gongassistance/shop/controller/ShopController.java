@@ -41,6 +41,8 @@ public class ShopController {
     @DeleteMapping
     public BaseResponse deleteShop(@PathVariable(name = "shopId") Long shopId) {
         shopService.deleteShop(shopId);
+
+
         return BaseResponse.builder().code(GongAssistanceCode.SUCCESS).message(GongAssistanceCode.SUCCESS.getMessage()).build();
     }
 }
