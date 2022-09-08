@@ -99,4 +99,15 @@ public class ShopService {
 
     }
 
+    public void deleteShop(Long shopId) {
+        Shop shopEntity = shopDataService.findById(shopId);
+
+        shopEntity.setStatus(ShopStatus.DELETE);
+        // 상태가 "삭제" 로 바뀌면 해당 샵의 사업자번호, 연락처, 카카오톡 아이디를 삭제합니다
+        shopEntity.setBizNo(null);
+        shopEntity.setTel(null);
+        shopEntity.setKakaotalkId(null);
+
+        shopDataService.save(shopEntity);
+    }
 }
