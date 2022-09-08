@@ -20,5 +20,4 @@ public enum GongAssistanceCode {
 
     private final String message;
     private final GongAssistanceErrorLevel errorLevel;
-
 }

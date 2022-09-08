@@ -3,10 +3,8 @@ package com.herren.gongassistance.shop.service;
 import com.herren.gongassistance.base.exception.GongAssistanceCode;
 import com.herren.gongassistance.base.exception.GongAssistanceException;
 import com.herren.gongassistance.base.lock.RedisLockService;
-import com.herren.gongassistance.data.EmployeeDataService;
 import com.herren.gongassistance.data.ShopDataService;
 import com.herren.gongassistance.employee.domain.dto.EmployeeInfo;
-import com.herren.gongassistance.employee.domain.entity.Employee;
 import com.herren.gongassistance.shop.domain.constants.ShopStatus;
 import com.herren.gongassistance.shop.domain.dto.ShopAddRequest;
 import com.herren.gongassistance.shop.domain.dto.ShopInfo;
@@ -17,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +22,6 @@ import java.util.stream.Collectors;
 public class ShopService {
 
     private final ShopDataService shopDataService;
-    private final EmployeeDataService employeeDataService;
 
     private final RedisLockService redisLockService;
 
@@ -47,25 +43,14 @@ public class ShopService {
 
     @Transactional
     public void updateShopStatus(Long shopId, ShopUpdateRequest request) {
-
         Shop shopEntity = shopDataService.findById(shopId);
-
         shopEntity.setStatus(request.getStatus());
 
-        // 상태가 "삭제" 로 바뀌면 해당 샵의 사업자번호, 연락처, 카카오톡 아이디를 삭제합니다
-        if(request.getStatus().equals(ShopStatus.DELETE)) {
-            shopEntity.setBizNo(null);
-            shopEntity.setTel(null);
-            shopEntity.setKakaotalkId(null);
+        if (request.getStatus().equals(ShopStatus.DELETE)) {
+            throw new GongAssistanceException(GongAssistanceCode.E0004);
         }
-
-
-
-
-
         shopDataService.save(shopEntity);
     }
-
 
     public ShopInfo findByIdFetchJoin(Long id) {
         Shop shopEntity = shopDataService.findByIdFetchJoin(id);
@@ -81,7 +66,7 @@ public class ShopService {
                 .updatedAt(shopEntity.getUpdatedAt())
                 .build();
 
-        if(!shopEntity.getEmployees().isEmpty()) {
+        if (!shopEntity.getEmployees().isEmpty()) {
             info.setEmployees(shopEntity.getEmployees().stream()
                     .map(it -> EmployeeInfo.builder()
                             .id(it.getId())
@@ -94,9 +79,7 @@ public class ShopService {
                             .build())
                     .collect(Collectors.toList()));
         }
-
         return info;
-
     }
 
     public void deleteShop(Long shopId) {

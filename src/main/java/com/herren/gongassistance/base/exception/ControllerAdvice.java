@@ -51,7 +51,6 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<BaseResponse> internalServerError(Exception e) {
-
         BaseResponse response = BaseResponse.builder()
                 .code(GongAssistanceCode.INTERNAL_ERROR)
                 .message(GongAssistanceCode.INTERNAL_ERROR.getMessage())

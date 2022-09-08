@@ -17,6 +17,4 @@ public class GongAssistanceException extends RuntimeException {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
-
-
 }
